@@ -25,9 +25,7 @@ public class TicTacToeLogic {
     }
 
     public TicTacToeLogic(TicTacToeMove ticTacToeMove) {
-        this.gameTable = Arrays.stream(ticTacToeMove.gameTableSerialized.split(";"))
-                .map(r -> Arrays.stream(r.split(",")).map(CellStatus::valueOf).toArray(CellStatus[]::new))
-                .toArray(CellStatus[][]::new);
+        this.gameTable = GameTableSerializer.deserialize(ticTacToeMove.gameTableSerialized);
         this.currentPlayer = ticTacToeMove.currentPlayer;
     }
 
@@ -77,10 +75,23 @@ public class TicTacToeLogic {
         return Optional.empty();
     }
 
+    public boolean isDraw() {
+        return Arrays.stream(gameTable).flatMap(Arrays::stream).allMatch(cell -> cell != CellStatus.E.E);
+    }
+
     public boolean isGameOver() {
         return Arrays.stream(gameTable)
                 .allMatch(r -> Arrays.stream(r).allMatch(c -> c != CellStatus.E));
 
+    }
+
+    public void makeaMove(int i, int j) {
+        gameTable[i][j] = currentPlayer == Player.X ? CellStatus.X : CellStatus.O;
+        currentPlayer = currentPlayer == Player.X ? Player.O : Player.X;
+    }
+
+    public boolean isMoveValid(int i, int j) {
+        return gameTable[i][j] == CellStatus.E;
     }
 
 }

@@ -1,8 +1,6 @@
 package com.example.TicTacToe;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 enum CellStatus {E, X, O}
 
@@ -18,14 +16,11 @@ public class TicTacToeMove {
     private Long id;
 
     public TicTacToeMove() {
-        this.currentPlayer = Player.X;
-        this.gameTableSerialized = "E,E,E;E,E,E;E,E,E";
+        this(new TicTacToeLogic());
     }
 
     public TicTacToeMove(TicTacToeLogic ticTacToeLogic) {
-        this.gameTableSerialized = Arrays.stream(ticTacToeLogic.gameTable)
-                .map(r -> Arrays.stream(r).map(CellStatus::toString).collect(Collectors.joining(",")))
-                .collect(Collectors.joining(";"));
+        this.gameTableSerialized = GameTableSerializer.serialize(ticTacToeLogic.gameTable);
         this.currentPlayer = ticTacToeLogic.currentPlayer;
     }
 

@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface TicTacToeMoveRepository extends JpaRepository<TicTacToeMove, Long> {
 
-    Optional<TicTacToeMove> findTopByOrderByIdAsc();
+    Optional<TicTacToeMove> findTopByOrderByIdDesc();
 }
